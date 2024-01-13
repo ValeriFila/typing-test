@@ -1,0 +1,83 @@
+/*!*****************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./css/style.css ***!
+  \*****************************************************************/
+@font-face {
+    font-family: 'Comfortaa';
+    src: local('Comfortaa'),
+    url(../images/Comfortaa-VariableFont_wght.ttf);
+}
+html {
+    font-size: 25px;
+    font-family: Comfortaa;
+}
+
+body {
+    margin: 0;
+}
+
+.app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: #76c564;
+
+}
+
+.title {
+    display: flex;
+    flex-direction: row;
+}
+
+.block {
+    display: flex;
+    margin-right: 50px;
+    margin-left: 50px;
+    width: 800px;
+    border-radius: 15px;
+    background-color: #e9ffea;
+}
+
+.block__text{
+    margin: 20px;
+    line-height: 30px;
+}
+
+.background__info {
+    background-color: aquamarine;
+    border-radius: inherit;
+    width: 100px;
+    height: 100%;
+}
+
+.letter {
+
+}
+
+.active-letter {
+    background-color: #2d8843;
+    padding: 0 3px;
+    border-radius: 3px;
+    color: #e9ffea;
+}
+
+.wrong-letter {
+    background-color: #ee6868;
+    padding: 0 3px;
+    border-radius: 3px;
+    color: #e9ffea;
+}
+
+.correct-letter {
+    color: darkgreen;
+}
+
+.smooth-hide {
+    opacity: 0;
+    transition: opacity 1500ms;
+}
+
+
+/*# sourceMappingURL=main.bfe6b816.css.map*/
