@@ -1,9 +1,9 @@
 //промисы
 let content
 const p = new Promise(function (resolve, reject) {
-    let response =  fetch(URL) //асинхронная операция запроса
+    let response =  fetch('https://fish-text.ru/get?format=html&number=1') //асинхронная операция запроса
     content = 'text content' //типа получаем тело ответа
-    resolve() //переводим промис в остояние fulfilled. результат выполнения - объект data
+    resolve() //переводим промис в остояние fulfilled
 })
 
 p.then(() => { //данный коллбэк будет вызван тогда, когда закончится асинхронная операция, т.е. вызван resolve()
@@ -11,6 +11,9 @@ p.then(() => { //данный коллбэк будет вызван тогда,
 })
 const errorPromise = new Promise(function (resolve, reject) {
     reject(new Error('ошибка!')) //переводим промис в состояни rejected. результат выполнения - объект error
+})
+errorPromise.catch(() => {
+    console.log('catch the error')
 })
 
 //еще один пример промисов
@@ -33,10 +36,32 @@ p2.then(data => {
             resolve(data)
         }, 2000)
     })
-}).then((clientData) => {
+})
+    .then((clientData) => {
     console.log('Data received', clientData)
-}).catch(err => console.error('Error: ', err))
+})
+    .catch(err => console.error('Error: ', err))
     .finally(() => console.log('Finally')) //выполнится в любом случае, независимо от того с ошибкй выполнился промис или нет
+
+
+//3 пример промисов
+const sleep = (ms => {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(), ms)
+    })
+})
+
+sleep(2000).then(() => console.log('After 2 sec'))
+sleep(5000).then(() => console.log('After 5 sec'))
+
+//методы промисов
+Promise.all([sleep(2000), sleep(5000)]).then(() => { //в данный метод мы передаем массив промисов, и он тоже возвращает промис
+    console.log('Promise.all') // и промис, который возвращается в методе All будет выполнен только тогда, когда выполняться переданные ему промисы
+}) // этот метод полезен тогда, когда нам нужно дождаться набор данных с разных эндпоинтов, чтобы их затем скомбинировать например
+
+Promise.race([sleep(2000), sleep(5000)]).then(() => { // тоже передактся массив просмисов
+    console.log('Promise.race') //как только выполнится первый промис, который быстрее всего, стразу же промис который возвращается в методе race выполняется
+})
 
 //рекурсивный вызов
 function factorial(n) {

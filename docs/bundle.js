@@ -306,7 +306,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1705173654778
+      // 1705224640633
       var cssReload = __webpack_require__(/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -328,6 +328,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_main_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_src_main_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
+// import '/src/learning-info'
 
 /***/ }),
 
@@ -338,37 +339,47 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (() => {
 
 const URL='https://fish-text.ru/get?format=html&number=1'
-const TEXT_CONTENT = document.getElementById('text')
-const POINTS_SPAN = document.getElementById('points')
-const LOADING_SPAN = document.getElementById('loading')
+const textContent = document.getElementById('text')
+const pointsSpan = document.getElementById('points')
+const loadingSpan = document.getElementById('loading')
 
 let timeoutText
 let intervalTitle
 let arrayOfLetters
 
-async function loadTextContent() {
-    const RESPONSE = await fetch(URL)
-    const TEXT_FROM_RESPONSE = await RESPONSE.text()
-    let arrayLength = TEXT_FROM_RESPONSE.length
-    arrayOfLetters = TEXT_FROM_RESPONSE.split("").slice(3, arrayLength - 4)
-
-    const promise = new Promise((resolve, reject) => {
-        loadText(arrayOfLetters)
-        setTimeout(() => {
-            resolve()
-        }, 3000)
-    })
-    promise.then(() => {
-        clearTimeout(timeoutText)
-        clearInterval(intervalTitle)
-        LOADING_SPAN.textContent = 'Текст загружен'
-        POINTS_SPAN.textContent = ''
-        LOADING_SPAN.classList.add('smooth-hide')
-        setAttributesForFirstElement()
+const fetchRandomText = url => {
+    return new Promise(resolve => {
+        const fetchedText = fetch(url)
+        resolve(fetchedText)
     })
 }
 
-loadTextContent()
+fetchRandomText(URL)
+    .then((fetchedData) => {
+        return fetchedData.text()
+    })
+    .then((data) => {
+        const arrayLength = data.length
+        console.log(arrayLength)
+        arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+    })
+    .then(() => {
+        return new Promise((resolve ,reject) => {
+            loadText(arrayOfLetters)
+            setTimeout(() => resolve(), 3000)
+        })
+    })
+    .then(() => {
+        clearTimeout(timeoutText)
+        clearInterval(intervalTitle)
+        loadingSpan.textContent = 'Текст загружен'
+        pointsSpan.textContent = ''
+        loadingSpan.classList.add('smooth-hide')
+        setAttributesForFirstElement()
+    })
+    .catch(e => console.error(e))
+
+// loadTextContent()
 let counter = 2
 function checkLetterForListener (event){
     let currentElem = document.getElementById('current-element')
@@ -378,7 +389,7 @@ function checkLetterForListener (event){
     let requiredLastElement = document.getElementsByClassName(`letter${arrayOfLetters.length}`)
     let lastElement = requiredLastElement[0]
     lastElement.setAttribute('id', 'last-element')
-
+    console.log(event.key)
 
     if (currentElem.textContent === event.key) {
         currentElem.classList.remove('active-letter', 'wrong-letter')
@@ -386,11 +397,13 @@ function checkLetterForListener (event){
         currentElem.removeAttribute('id')
         if (currentElem === lastElement) {
             document.removeEventListener('keydown', checkLetterForListener)
-            return 0
+            return
         }
         nextElem.setAttribute('id', 'current-element')
         nextElem.classList.add('active-letter')
         counter++
+    } else if (event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt' || event.key === 'Tab' || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'AltGraph') {
+
     } else {
         currentElem.classList.remove('correct-letter')
         currentElem.classList.add('wrong-letter')
@@ -398,9 +411,9 @@ function checkLetterForListener (event){
 }
 
 function setAttributesForFirstElement() {
-    const FIRST_ELEMENT = document.querySelector('span')
-    FIRST_ELEMENT.setAttribute('id', 'current-element')
-    FIRST_ELEMENT.classList.add('active-letter')
+    const firstElement = document.querySelector('span')
+    firstElement.setAttribute('id', 'current-element')
+    firstElement.classList.add('active-letter')
 
     document.addEventListener('keydown', checkLetterForListener)
 }
@@ -408,21 +421,43 @@ function setAttributesForFirstElement() {
 function loadText(array) {
     timeoutText = setTimeout(() => {
         array.forEach((letter, index) => {
-            TEXT_CONTENT.innerHTML += `<span class="letter${index + 1}">${letter}</span>`
+            textContent.innerHTML += `<span class="letter${index + 1}">${letter}</span>`
         })
     }, 3000)
 
     intervalTitle = setInterval(() => {
-            switch (POINTS_SPAN.textContent) {
-                case '...': POINTS_SPAN.textContent = '.'
+            switch (pointsSpan.textContent) {
+                case '...': pointsSpan.textContent = '.'
                     break;
-                case '.': POINTS_SPAN.textContent = '..'
+                case '.': pointsSpan.textContent = '..'
                     break;
-                default: POINTS_SPAN.textContent = '...'
+                default: pointsSpan.textContent = '...'
             }
     },500)
 }
 
+//2 вариант
+// async function loadTextContent() {
+//     const RESPONSE = await fetch(URL)
+//     const TEXT_FROM_RESPONSE = await RESPONSE.text()
+//     let arrayLength = TEXT_FROM_RESPONSE.length
+//     arrayOfLetters = TEXT_FROM_RESPONSE.split("").slice(3, arrayLength - 4)
+//
+//     const promise = new Promise((resolve, reject) => {
+//         loadText(arrayOfLetters)
+//         setTimeout(() => {
+//             resolve()
+//         }, 3000)
+//     })
+//     promise.then(() => {
+//         clearTimeout(timeoutText)
+//         clearInterval(intervalTitle)
+//         LOADING_SPAN.textContent = 'Текст загружен'
+//         POINTS_SPAN.textContent = ''
+//         LOADING_SPAN.classList.add('smooth-hide')
+//         setAttributesForFirstElement()
+//     })
+// }
 
 /***/ })
 
@@ -520,7 +555,7 @@ function loadText(array) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("114a07932efb31435258")
+/******/ 		__webpack_require__.h = () => ("4f006356f2dc0afd8946")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
