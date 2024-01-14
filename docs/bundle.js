@@ -306,7 +306,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1705225652554
+      // 1705248882785
       var cssReload = __webpack_require__(/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -338,7 +338,7 @@ __webpack_require__.r(__webpack_exports__);
   \*********************/
 /***/ (() => {
 
-const URL='https://fish-text.ru/get?format=html&number=1'
+const URL='https://fish-text.ru/get?format=html&number=3'
 const textContent = document.getElementById('text')
 const pointsSpan = document.getElementById('points')
 const loadingSpan = document.getElementById('loading')
@@ -570,7 +570,7 @@ function countPrecision(curElem, pressedKey, array) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("707ff31f9c579295ed9a")
+/******/ 		__webpack_require__.h = () => ("aa15882ff0e140df9e61")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

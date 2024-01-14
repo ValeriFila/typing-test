@@ -3,9 +3,11 @@
     src: local('Comfortaa'),
     url(/fonts/Comfortaa-VariableFont_wght.ttf);
 }
+
 html {
     font-size: 25px;
     font-family: Comfortaa;
+    overflow: hidden;
 }
 
 body {
@@ -30,6 +32,7 @@ body {
 
 .block {
     display: flex;
+    align-content: space-between;
     margin-right: 50px;
     margin-left: 50px;
     width: 800px;
@@ -38,14 +41,18 @@ body {
 }
 
 .block__text{
+    width: 600px;
     margin: 20px;
     line-height: 30px;
 }
 
 .background__info {
-    background-color: aquamarine;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #d9ffda;
     border-radius: inherit;
-    width: 100px;
+    width: 200px;
     height: 100%;
 }
 
@@ -74,4 +81,103 @@ body {
 .smooth-hide {
     opacity: 0;
     transition: opacity 1500ms;
+}
+
+.precision-text {
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.velocity-text {
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.try-again-button {
+    font-family: Comfortaa;
+    cursor: pointer;
+    border: 1px solid #2d8843;
+    color: #2d8843;
+    font-weight: bold;
+    border-radius: 10px;
+    width: 130px;
+    height: 40px;
+    margin-bottom: 50px;
+    margin-left: 30px;
+    background-color: transparent;
+}
+
+.try-again-button:hover {
+    background-color: #2d8843;
+    color: #e9ffea;
+}
+
+.precision p {
+    margin-top: 10px;
+}
+
+.precision {
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+.velocity {
+    margin-left: 30px;
+}
+
+.velocity p {
+    margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+    .block {
+        flex-direction: column;
+        width: 700px;
+        font-size: 20px;
+    }
+    .background__info {
+        flex-direction: row;
+        width: 700px;
+        height: 100px;
+        align-items: center;
+    }
+    .precision {
+        margin-top: 0;
+        margin-left: 20px;
+    }
+    .velocity {
+        margin-left: 0;
+    }
+    .try-again-button {
+        margin-bottom: 0;
+        margin-right: 20px;
+        margin-left: 0;
+    }
+    .velocity p {
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+    .precision p {
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+    .precision-text {
+        margin-top: 0;
+    }
+    .velocity-text {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 800px) {
+    .block {
+        width: 600px;
+        font-size: 18px;
+    }
+    .block__text {
+        width: 550px;
+    }
+    .background__info {
+        width: 600px;
+    }
 }

@@ -1,4 +1,4 @@
-const URL='https://fish-text.ru/get?format=html&number=1'
+const URL='https://fish-text.ru/get?format=html&number=3'
 const textContent = document.getElementById('text')
 const pointsSpan = document.getElementById('points')
 const loadingSpan = document.getElementById('loading')
