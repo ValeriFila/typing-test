@@ -306,7 +306,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1705224640633
+      // 1705225652554
       var cssReload = __webpack_require__(/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -342,10 +342,13 @@ const URL='https://fish-text.ru/get?format=html&number=1'
 const textContent = document.getElementById('text')
 const pointsSpan = document.getElementById('points')
 const loadingSpan = document.getElementById('loading')
+const prec = document.getElementById('precision')
 
 let timeoutText
 let intervalTitle
 let arrayOfLetters
+let correctAnswers
+
 
 const fetchRandomText = url => {
     return new Promise(resolve => {
@@ -362,6 +365,7 @@ fetchRandomText(URL)
         const arrayLength = data.length
         console.log(arrayLength)
         arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+        correctAnswers = arrayOfLetters.length
     })
     .then(() => {
         return new Promise((resolve ,reject) => {
@@ -379,7 +383,6 @@ fetchRandomText(URL)
     })
     .catch(e => console.error(e))
 
-// loadTextContent()
 let counter = 2
 function checkLetterForListener (event){
     let currentElem = document.getElementById('current-element')
@@ -389,7 +392,6 @@ function checkLetterForListener (event){
     let requiredLastElement = document.getElementsByClassName(`letter${arrayOfLetters.length}`)
     let lastElement = requiredLastElement[0]
     lastElement.setAttribute('id', 'last-element')
-    console.log(event.key)
 
     if (currentElem.textContent === event.key) {
         currentElem.classList.remove('active-letter', 'wrong-letter')
@@ -405,8 +407,12 @@ function checkLetterForListener (event){
     } else if (event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt' || event.key === 'Tab' || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'AltGraph') {
 
     } else {
-        currentElem.classList.remove('correct-letter')
+        if (currentElem.classList.contains('active-letter')) {
+            countPrecision(currentElem.textContent, event.key, arrayOfLetters)
+        }
+        currentElem.classList.remove('active-letter')
         currentElem.classList.add('wrong-letter')
+
     }
 }
 
@@ -436,7 +442,16 @@ function loadText(array) {
     },500)
 }
 
-//2 вариант
+let precision
+function countPrecision(curElem, pressedKey, array) {
+    if (curElem !== pressedKey) {
+        correctAnswers = correctAnswers - 1
+    }
+    precision = (correctAnswers / array.length * 100).toFixed(1)
+    prec.textContent = precision + '%'
+}
+
+//1 вариант функции
 // async function loadTextContent() {
 //     const RESPONSE = await fetch(URL)
 //     const TEXT_FROM_RESPONSE = await RESPONSE.text()
@@ -555,7 +570,7 @@ function loadText(array) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("4f006356f2dc0afd8946")
+/******/ 		__webpack_require__.h = () => ("707ff31f9c579295ed9a")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

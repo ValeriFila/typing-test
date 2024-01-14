@@ -1,3 +1,11 @@
+self["webpackHotUpdate"]("main",{
+
+/***/ "./src/main.js":
+/*!*********************!*\
+  !*** ./src/main.js ***!
+  \*********************/
+/***/ (() => {
+
 const URL='https://fish-text.ru/get?format=html&number=1'
 const textContent = document.getElementById('text')
 const pointsSpan = document.getElementById('points')
@@ -133,3 +141,16 @@ function countPrecision(curElem, pressedKey, array) {
 //         setAttributesForFirstElement()
 //     })
 // }
+
+/***/ })
+
+},
+/******/ function(__webpack_require__) { // webpackRuntimeModules
+/******/ /* webpack/runtime/getFullHash */
+/******/ (() => {
+/******/ 	__webpack_require__.h = () => ("ac7e3e3f000bc4e463b9")
+/******/ })();
+/******/ 
+/******/ }
+);
+//# sourceMappingURL=main.70fc63a36de9dd4e610c.hot-update.js.map
