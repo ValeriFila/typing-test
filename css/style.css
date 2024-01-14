@@ -96,6 +96,7 @@ body {
 .try-again-button {
     font-family: Comfortaa;
     cursor: pointer;
+    font-size: 18px;
     border: 1px solid #2d8843;
     color: #2d8843;
     font-weight: bold;
@@ -105,11 +106,13 @@ body {
     margin-bottom: 50px;
     margin-left: 30px;
     background-color: transparent;
+    transition: all 0.3s ease-in;
 }
 
 .try-again-button:hover {
     background-color: #2d8843;
     color: #e9ffea;
+
 }
 
 .precision p {

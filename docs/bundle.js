@@ -306,7 +306,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1705248882785
+      // 1705255811660
       var cssReload = __webpack_require__(/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -338,7 +338,7 @@ __webpack_require__.r(__webpack_exports__);
   \*********************/
 /***/ (() => {
 
-const URL='https://fish-text.ru/get?format=html&number=3'
+const URL='https://fish-text.ru/get?format=html&number=1'
 const textContent = document.getElementById('text')
 const pointsSpan = document.getElementById('points')
 const loadingSpan = document.getElementById('loading')
@@ -365,6 +365,14 @@ fetchRandomText(URL)
         const arrayLength = data.length
         console.log(arrayLength)
         arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+        arrayOfLetters.forEach((letter, index) => {
+            console.log(letter)
+            if (letter === '—') {
+                console.log(letter)
+                arrayOfLetters[index] = '-'
+                console.log('catch')
+            }
+        })
         correctAnswers = arrayOfLetters.length
     })
     .then(() => {
@@ -449,6 +457,10 @@ function countPrecision(curElem, pressedKey, array) {
     }
     precision = (correctAnswers / array.length * 100).toFixed(1)
     prec.textContent = precision + '%'
+}
+
+function countVelocity() {
+
 }
 
 //1 вариант функции
@@ -570,7 +582,7 @@ function countPrecision(curElem, pressedKey, array) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("aa15882ff0e140df9e61")
+/******/ 		__webpack_require__.h = () => ("930b797f9ccf78aa17d7")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

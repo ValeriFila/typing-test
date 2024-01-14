@@ -1,4 +1,4 @@
-const URL='https://fish-text.ru/get?format=html&number=3'
+const URL='https://fish-text.ru/get?format=html&number=1'
 const textContent = document.getElementById('text')
 const pointsSpan = document.getElementById('points')
 const loadingSpan = document.getElementById('loading')
@@ -25,6 +25,14 @@ fetchRandomText(URL)
         const arrayLength = data.length
         console.log(arrayLength)
         arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+        arrayOfLetters.forEach((letter, index) => {
+            console.log(letter)
+            if (letter === '—') {
+                console.log(letter)
+                arrayOfLetters[index] = '-'
+                console.log('catch')
+            }
+        })
         correctAnswers = arrayOfLetters.length
     })
     .then(() => {
@@ -109,6 +117,10 @@ function countPrecision(curElem, pressedKey, array) {
     }
     precision = (correctAnswers / array.length * 100).toFixed(1)
     prec.textContent = precision + '%'
+}
+
+function countVelocity() {
+
 }
 
 //1 вариант функции
