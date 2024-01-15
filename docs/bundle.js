@@ -306,7 +306,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1705256827317
+      // 1705350505417
       var cssReload = __webpack_require__(/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -330,6 +330,8 @@ __webpack_require__.r(__webpack_exports__);
 
 // import '/src/learning-info'
 
+
+
 /***/ }),
 
 /***/ "./src/main.js":
@@ -338,17 +340,25 @@ __webpack_require__.r(__webpack_exports__);
   \*********************/
 /***/ (() => {
 
-const URL='https://fish-text.ru/get?format=html&number=1'
+const URL_RU='https://fish-text.ru/get?format=html&number=3'
 const textContent = document.getElementById('text')
+const spansDiv = document.getElementById('spans')
 const pointsSpan = document.getElementById('points')
 const loadingSpan = document.getElementById('loading')
 const prec = document.getElementById('precision')
+const againButton = document.getElementById('again-button')
+const startButton = document.getElementById('start')
+const welcomeTitle = document.getElementById('welcome-title')
+const initialInfo = document.getElementById('initial-information')
+const languageButtons = document.getElementById('language')
+const englishButton = document.getElementById('en')
+const russianButton = document.getElementById('ru')
 
 let timeoutText
 let intervalTitle
+let timeoutPromise
 let arrayOfLetters
 let correctAnswers
-
 
 const fetchRandomText = url => {
     return new Promise(resolve => {
@@ -357,39 +367,38 @@ const fetchRandomText = url => {
     })
 }
 
-fetchRandomText(URL)
-    .then((fetchedData) => {
-        return fetchedData.text()
-    })
-    .then((data) => {
-        const arrayLength = data.length
-        console.log(arrayLength)
-        arrayOfLetters = data.split('').slice(3, arrayLength - 4)
-        arrayOfLetters.forEach((letter, index) => {
-            console.log(letter)
-            if (letter === '—') {
-                console.log(letter)
-                arrayOfLetters[index] = '-'
-                console.log('catch')
-            }
-        })
-        correctAnswers = arrayOfLetters.length
-    })
-    .then(() => {
-        return new Promise((resolve ,reject) => {
-            loadText(arrayOfLetters)
-            setTimeout(() => resolve(), 3000)
-        })
-    })
-    .then(() => {
-        clearTimeout(timeoutText)
-        clearInterval(intervalTitle)
-        loadingSpan.textContent = 'Текст загружен'
-        pointsSpan.textContent = ''
-        loadingSpan.classList.add('smooth-hide')
-        setAttributesForFirstElement()
-    })
-    .catch(e => console.error(e))
+// fetchRandomText(URL)
+//     .then((fetchedData) => {
+//         return fetchedData.text()
+//     })
+//     .then((data) => {
+//         const arrayLength = data.length
+//         arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+//         arrayOfLetters.forEach((letter, index) => {
+//             if (letter === '—') {
+//                 arrayOfLetters[index] = '-'
+//             }
+//             if (letter === '  ') {
+//                 arrayOfLetters[index] = '   '
+//             }
+//         })
+//         correctAnswers = arrayOfLetters.length
+//     })
+//     .then(() => {
+//         return new Promise((resolve ,reject) => {
+//             loadText(arrayOfLetters)
+//             setTimeout(() => resolve(), 3000)
+//         })
+//     })
+//     .then(() => {
+//         clearTimeout(timeoutText)
+//         clearInterval(intervalTitle)
+//         loadingSpan.textContent = 'Текст загружен'
+//         pointsSpan.textContent = ''
+//         loadingSpan.classList.add('smooth-hide')
+//         setAttributesForFirstElement()
+//     })
+//     .catch(e => console.error(e))
 
 let counter = 2
 function checkLetterForListener (event){
@@ -435,7 +444,7 @@ function setAttributesForFirstElement() {
 function loadText(array) {
     timeoutText = setTimeout(() => {
         array.forEach((letter, index) => {
-            textContent.innerHTML += `<span class="letter${index + 1}">${letter}</span>`
+            spansDiv.innerHTML += `<span class="letter${index + 1}">${letter}</span>`
         })
     }, 3000)
 
@@ -459,9 +468,94 @@ function countPrecision(curElem, pressedKey, array) {
     prec.textContent = precision + '%'
 }
 
+function clickOnToggle(firstLanguage, secondLanguage) {
+    firstLanguage.style.backgroundColor = '#2d8843'
+    firstLanguage.style.color = '#e9ffea'
+    secondLanguage.style.backgroundColor = 'transparent'
+    secondLanguage.style.color = '#2d8843'
+}
+
+englishButton.addEventListener('click', function () {
+    clickOnToggle(englishButton, russianButton)
+})
+
+russianButton.addEventListener('click', function () {
+    clickOnToggle(russianButton, englishButton)
+})
+function clickStartButton() {
+    welcomeTitle.classList.add('hide-element')
+    startButton.classList.add('hide-element')
+    languageButtons.classList.add('hide-element')
+    loadingSpan.textContent = 'Загрузка'
+    pointsSpan.textContent = '...'
+    initialInfo.style.display = 'flex'
+    textContent.style.width = '600px'
+    textContent.style.flexDirection = 'row'
+    textContent.style.display = 'block'
+    textContent.style.textAlign = 'initial'
+
+    fetchRandomText(URL_RU)
+    .then((fetchedData) => {
+        return fetchedData.text()
+    })
+    .then((data) => {
+        const arrayLength = data.length
+        arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+        arrayOfLetters.forEach((letter, index) => {
+            if (letter === '—') {
+                arrayOfLetters[index] = '-'
+            }
+            if (letter === '  ') {
+                arrayOfLetters[index] = ' '
+            }
+        })
+        correctAnswers = arrayOfLetters.length
+    })
+    .then(() => {
+        return new Promise((resolve ,reject) => {
+            loadText(arrayOfLetters)
+            timeoutPromise = setTimeout(() => resolve(), 3000)
+        })
+    })
+    .then(() => {
+        clearTimeout(timeoutText)
+        clearInterval(intervalTitle)
+        loadingSpan.textContent = 'Текст загружен'
+        pointsSpan.textContent = ''
+        loadingSpan.classList.add('smooth-hide')
+        setAttributesForFirstElement()
+    })
+    .catch(e => console.error(e))
+}
+
+function clickAgainButton() {
+    clearTimeout(timeoutText)
+    clearTimeout(timeoutPromise)
+    clearInterval(intervalTitle)
+    document.removeEventListener('keydown', checkLetterForListener)
+    welcomeTitle.classList.remove('hide-element')
+    startButton.classList.remove('hide-element')
+    spansDiv.innerHTML = ''
+    languageButtons.classList.remove('hide-element')
+    loadingSpan.textContent = 'Тренажер слепой печати'
+    loadingSpan.style.opacity = '100%'
+    loadingSpan.classList.remove('smooth-hide')
+    pointsSpan.textContent = ''
+    initialInfo.style.display = 'none'
+    textContent.style.display = 'flex'
+    textContent.style.flexDirection = 'column'
+    textContent.style.width = '800px'
+    textContent.style.alignItems = 'center'
+    textContent.style.textAlign = 'center'
+}
+
+startButton.onclick = clickStartButton
+againButton.onclick = clickAgainButton
 function countVelocity() {
 
 }
+
+
 
 //1 вариант функции
 // async function loadTextContent() {
@@ -582,7 +676,7 @@ function countVelocity() {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("c696fe9e1cc7ba1a735e")
+/******/ 		__webpack_require__.h = () => ("4af15cfd6aadf2594f5c")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

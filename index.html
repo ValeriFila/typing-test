@@ -7,14 +7,23 @@
 <body>
     <div class="app">
         <div class="title">
-            <h1 id="loading">Загрузка</h1>
-            <h1 id="points">...</h1>
+            <h1 id="loading">Тренажер слепой печати</h1>
+            <h1 id="points"></h1>
         </div>
         <div class="block">
             <div class="block__text" id="text">
-
+                <div id="spans"></div>
+                <p id="welcome-title">Добро пожаловать на тренажер слепой печати! Выберите раскладку и нажмите кнопку "Начать"</p>
+                <div class="buttons">
+                    <div class="buttons__language" id="language">
+                        <button class="buttons__language-ru" id="ru">Русская</button>
+                        <button class="buttons__language-en" id="en">Английская</button>
+                    </div>
+                    <button id="start" class="start-button">Начать</button>
+                </div>
             </div>
-            <div class="background__info">
+
+            <div class="background__info" id="initial-information">
                 <div class="precision">
                     <p class="precision-text">Точность:</p>
                     <p id="precision">100%</p>
@@ -23,7 +32,7 @@
                     <p class="velocity-text">Скорость:</p>
                     <p id="velocity">0 зн./мин</p>
                 </div>
-                <button class="try-again-button">Заново</button>
+                <button class="try-again-button" id="again-button">Заново</button>
             </div>
         </div>
     </div>
