@@ -1,4 +1,3 @@
-const URL_RU='https://fish-text.ru/get?format=html&number=3'
 const textContent = document.getElementById('text')
 const spansDiv = document.getElementById('spans')
 const pointsSpan = document.getElementById('points')
@@ -12,11 +11,15 @@ const languageButtons = document.getElementById('language')
 const englishButton = document.getElementById('en')
 const russianButton = document.getElementById('ru')
 
+let urlRu = 'https://fish-text.ru/get?format=html&number=3'
+let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=3&format=html'
+let url = urlRu
 let timeoutText
 let intervalTitle
 let timeoutPromise
 let arrayOfLetters
 let correctAnswers
+let chosenLanguage
 
 const fetchRandomText = url => {
     return new Promise(resolve => {
@@ -134,10 +137,14 @@ function clickOnToggle(firstLanguage, secondLanguage) {
 }
 
 englishButton.addEventListener('click', function () {
+    chosenLanguage = 'english'
+    url = urlEn
     clickOnToggle(englishButton, russianButton)
 })
 
 russianButton.addEventListener('click', function () {
+    chosenLanguage = 'russian'
+    url = urlRu
     clickOnToggle(russianButton, englishButton)
 })
 function clickStartButton() {
@@ -152,13 +159,18 @@ function clickStartButton() {
     textContent.style.display = 'block'
     textContent.style.textAlign = 'initial'
 
-    fetchRandomText(URL_RU)
+    fetchRandomText(url)
     .then((fetchedData) => {
         return fetchedData.text()
     })
     .then((data) => {
         const arrayLength = data.length
-        arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+        if (url === urlEn) {
+            arrayOfLetters = data.split('').slice(3, arrayLength - 5)
+            console.log(arrayOfLetters)
+        } else {
+            arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+        }
         arrayOfLetters.forEach((letter, index) => {
             if (letter === '—') {
                 arrayOfLetters[index] = '-'
@@ -205,6 +217,8 @@ function clickAgainButton() {
     textContent.style.width = '800px'
     textContent.style.alignItems = 'center'
     textContent.style.textAlign = 'center'
+    url = urlRu
+    clickOnToggle(russianButton, englishButton)
 }
 
 startButton.onclick = clickStartButton

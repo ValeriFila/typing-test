@@ -163,6 +163,54 @@ function logName(name) {
 const fullname = logName('Lera')
 fullname('Filatova')
 
+//
+function urlGenerator(domain) {
+    return function (url) {
+        return (`https://${url}.${domain}`)
+    }
+}
+
+const comUrl = urlGenerator('com')
+const ruUrl = urlGenerator('ru')
+
+console.log(comUrl('netflix'))
+console.log(comUrl('youtube'))
+
+console.log(ruUrl('netflix'))
+console.log(ruUrl('youtube'))
+
+//написать свою функцию Bind
+function logPerson() {
+    console.log(`Person: ${this.name}, ${this.age}, ${this.job}`)
+}
+
+const pers1 = {
+    name: 'Михаил',
+    age: 22,
+    job: 'Frontend'
+}
+
+const pers2 = {
+    name: 'Елена',
+    age: 19,
+    job: 'SMM'
+}
+
+function bind2(context, fn) {
+    return function(...arr) {
+        fn.apply(context, arr)
+    }
+}
+
+bind2(pers1, logPerson)()
+bind2(pers2, logPerson)()
+
+function bind(context, func) {
+    return function(...args) {
+        func.apply(context, args)
+    }
+}
+
 
 
 
