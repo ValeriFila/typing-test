@@ -306,7 +306,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1705383680407
+      // 1705418271202
       var cssReload = __webpack_require__(/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -352,9 +352,10 @@ const initialInfo = document.getElementById('initial-information')
 const languageButtons = document.getElementById('language')
 const englishButton = document.getElementById('en')
 const russianButton = document.getElementById('ru')
+const skeleton = document.getElementById('skeleton-body')
 
 let urlRu = 'https://fish-text.ru/get?format=html&number=3'
-let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=3&format=html'
+let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=5&format=html'
 let url = urlRu
 let timeoutText
 let intervalTitle
@@ -369,39 +370,6 @@ const fetchRandomText = url => {
         resolve(fetchedText)
     })
 }
-
-// fetchRandomText(URL)
-//     .then((fetchedData) => {
-//         return fetchedData.text()
-//     })
-//     .then((data) => {
-//         const arrayLength = data.length
-//         arrayOfLetters = data.split('').slice(3, arrayLength - 4)
-//         arrayOfLetters.forEach((letter, index) => {
-//             if (letter === '—') {
-//                 arrayOfLetters[index] = '-'
-//             }
-//             if (letter === '  ') {
-//                 arrayOfLetters[index] = '   '
-//             }
-//         })
-//         correctAnswers = arrayOfLetters.length
-//     })
-//     .then(() => {
-//         return new Promise((resolve ,reject) => {
-//             loadText(arrayOfLetters)
-//             setTimeout(() => resolve(), 3000)
-//         })
-//     })
-//     .then(() => {
-//         clearTimeout(timeoutText)
-//         clearInterval(intervalTitle)
-//         loadingSpan.textContent = 'Текст загружен'
-//         pointsSpan.textContent = ''
-//         loadingSpan.classList.add('smooth-hide')
-//         setAttributesForFirstElement()
-//     })
-//     .catch(e => console.error(e))
 
 let counter = 2
 function checkLetterForListener (event){
@@ -500,6 +468,8 @@ function clickStartButton() {
     textContent.style.flexDirection = 'row'
     textContent.style.display = 'block'
     textContent.style.textAlign = 'initial'
+    skeleton.style.display = 'flex'
+    fillSkeletonWithText()
 
     fetchRandomText(url)
     .then((fetchedData) => {
@@ -509,7 +479,6 @@ function clickStartButton() {
         const arrayLength = data.length
         if (url === urlEn) {
             arrayOfLetters = data.split('').slice(3, arrayLength - 5)
-            console.log(arrayOfLetters)
         } else {
             arrayOfLetters = data.split('').slice(3, arrayLength - 4)
         }
@@ -531,10 +500,12 @@ function clickStartButton() {
     })
     .then(() => {
         clearTimeout(timeoutText)
+        clearTimeout(timeoutPromise)
         clearInterval(intervalTitle)
         loadingSpan.textContent = 'Текст загружен'
         pointsSpan.textContent = ''
         loadingSpan.classList.add('smooth-hide')
+        skeleton.style.display = 'none'
         setAttributesForFirstElement()
     })
     .catch(e => console.error(e))
@@ -544,21 +515,29 @@ function clickAgainButton() {
     clearTimeout(timeoutText)
     clearTimeout(timeoutPromise)
     clearInterval(intervalTitle)
+
     document.removeEventListener('keydown', checkLetterForListener)
+
     welcomeTitle.classList.remove('hide-element')
     startButton.classList.remove('hide-element')
-    spansDiv.innerHTML = ''
     languageButtons.classList.remove('hide-element')
+
+    spansDiv.innerHTML = ''
+
     loadingSpan.textContent = 'Тренажер слепой печати'
     loadingSpan.style.opacity = '100%'
     loadingSpan.classList.remove('smooth-hide')
+
     pointsSpan.textContent = ''
     initialInfo.style.display = 'none'
+
     textContent.style.display = 'flex'
     textContent.style.flexDirection = 'column'
     textContent.style.width = '800px'
     textContent.style.alignItems = 'center'
     textContent.style.textAlign = 'center'
+
+    skeleton.innerHTML = ''
     url = urlRu
     clickOnToggle(russianButton, englishButton)
 }
@@ -569,7 +548,13 @@ function countVelocity() {
 
 }
 
-
+function fillSkeletonWithText() {
+    let text = 'skeleton skeleton skeleton skeleton skeleton skeleton skeleton skeleton'
+    let arrayOfSkeletonText = text.split(' ')
+    arrayOfSkeletonText.forEach((word) => {
+        skeleton.innerHTML += `<span class="skeleton__text">${word}</span>`
+    })
+}
 
 //1 вариант функции
 // async function loadTextContent() {
@@ -593,6 +578,41 @@ function countVelocity() {
 //         setAttributesForFirstElement()
 //     })
 // }
+
+//2 вариант
+// fetchRandomText(URL)
+//     .then((fetchedData) => {
+//         return fetchedData.text()
+//     })
+//     .then((data) => {
+//         const arrayLength = data.length
+//         arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+//         arrayOfLetters.forEach((letter, index) => {
+//             if (letter === '—') {
+//                 arrayOfLetters[index] = '-'
+//             }
+//             if (letter === '  ') {
+//                 arrayOfLetters[index] = '   '
+//             }
+//         })
+//         correctAnswers = arrayOfLetters.length
+//     })
+//     .then(() => {
+//         return new Promise((resolve ,reject) => {
+//             loadText(arrayOfLetters)
+//             setTimeout(() => resolve(), 3000)
+//         })
+//     })
+//     .then(() => {
+//         clearTimeout(timeoutText)
+//         clearInterval(intervalTitle)
+//         loadingSpan.textContent = 'Текст загружен'
+//         pointsSpan.textContent = ''
+//         loadingSpan.classList.add('smooth-hide')
+//         setAttributesForFirstElement()
+//     })
+//     .catch(e => console.error(e))
+
 
 /***/ })
 
@@ -690,7 +710,7 @@ function countVelocity() {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("81140a612d87c61d59e7")
+/******/ 		__webpack_require__.h = () => ("aeb50a21e2ed0912e18a")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
