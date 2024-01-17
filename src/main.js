@@ -17,7 +17,8 @@ let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=5&format=html'
 let url = urlRu
 let timeoutText
 let intervalTitle
-let timeoutPromise
+let timeoutPromise1
+let timeoutPromise2
 let arrayOfLetters
 let correctAnswers
 let chosenLanguage
@@ -31,6 +32,7 @@ const fetchRandomText = url => {
 
 let counter = 2
 function checkLetterForListener (event){
+    countVelocity()
     let currentElem = document.getElementById('current-element')
     let requiredNextElement = document.getElementsByClassName(`letter${counter}`)
     let nextElem = requiredNextElement[0]
@@ -75,16 +77,18 @@ function loadText(array) {
         array.forEach((letter, index) => {
             spansDiv.innerHTML += `<span class="letter${index + 1}">${letter}</span>`
         })
-    }, 3000)
+    }, 1500)
+}
 
+function pointsSpanAnimation() {
     intervalTitle = setInterval(() => {
-            switch (pointsSpan.textContent) {
-                case '...': pointsSpan.textContent = '.'
-                    break;
-                case '.': pointsSpan.textContent = '..'
-                    break;
-                default: pointsSpan.textContent = '...'
-            }
+        switch (pointsSpan.textContent) {
+            case '...': pointsSpan.textContent = '.'
+                break;
+            case '.': pointsSpan.textContent = '..'
+                break;
+            default: pointsSpan.textContent = '...'
+        }
     },500)
 }
 
@@ -121,6 +125,7 @@ function clickStartButton() {
     languageButtons.classList.add('hide-element')
     loadingSpan.textContent = 'Загрузка'
     pointsSpan.textContent = '...'
+    pointsSpanAnimation()
     initialInfo.style.display = 'flex'
     textContent.style.width = '600px'
     textContent.style.flexDirection = 'row'
@@ -131,9 +136,14 @@ function clickStartButton() {
 
     fetchRandomText(url)
     .then((fetchedData) => {
-        return fetchedData.text()
+        console.log('1')
+        return new Promise((resolve, reject) => {
+            timeoutPromise1 = setTimeout(() => resolve(fetchedData.text()), 1500)
+        })
     })
     .then((data) => {
+        console.log('2')
+        console.log(data)
         const arrayLength = data.length
         if (url === urlEn) {
             arrayOfLetters = data.split('').slice(3, arrayLength - 5)
@@ -149,16 +159,16 @@ function clickStartButton() {
             }
         })
         correctAnswers = arrayOfLetters.length
-    })
-    .then(() => {
         return new Promise((resolve ,reject) => {
             loadText(arrayOfLetters)
-            timeoutPromise = setTimeout(() => resolve(), 3000)
+            timeoutPromise2 = setTimeout(() => resolve(), 1500)
         })
     })
     .then(() => {
+        console.log('3')
         clearTimeout(timeoutText)
-        clearTimeout(timeoutPromise)
+        clearTimeout(timeoutPromise1)
+        clearTimeout(timeoutPromise2)
         clearInterval(intervalTitle)
         loadingSpan.textContent = 'Текст загружен'
         pointsSpan.textContent = ''
@@ -171,7 +181,8 @@ function clickStartButton() {
 
 function clickAgainButton() {
     clearTimeout(timeoutText)
-    clearTimeout(timeoutPromise)
+    clearTimeout(timeoutPromise1)
+    clearTimeout(timeoutPromise2)
     clearInterval(intervalTitle)
 
     document.removeEventListener('keydown', checkLetterForListener)

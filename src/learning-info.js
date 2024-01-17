@@ -196,25 +196,14 @@ const pers2 = {
     job: 'SMM'
 }
 
-function bind2(context, fn) {
-    return function(...arr) {
+function bind(context, fn) {
+    return function (...arr) {
         fn.apply(context, arr)
     }
 }
 
-bind2(pers1, logPerson)()
-bind2(pers2, logPerson)()
-
-function bind(context, func) {
-    return function(...args) {
-        func.apply(context, args)
-    }
-}
-
-
-
-
-
+bind(pers1, logPerson)()
+bind(pers2, logPerson)()
 
 
 
