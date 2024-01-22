@@ -48,7 +48,6 @@ function checkLetterForListener (event){
         currentElem.classList.add('correct-letter')
         currentElem.removeAttribute('id')
         if (currentElem.classList.contains(`letter${arrayOfLetters.length}`)) {
-            console.log('you entered the last letter')
             clearInterval(renderInterval)
             clearInterval(plusOneSecondCounter)
             document.removeEventListener('keydown', checkLetterForListener)
