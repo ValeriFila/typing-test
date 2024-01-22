@@ -306,7 +306,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1705488043811
+      // 1705911612333
       var cssReload = __webpack_require__(/*! ../node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -324,240 +324,329 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/style.css */ "./css/style.css");
-/* harmony import */ var _src_learning_info__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../src/learning-info */ "./src/learning-info.js");
-/* harmony import */ var _src_learning_info__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_src_learning_info__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _src_main_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../src/main.js */ "./src/main.js");
+/* harmony import */ var _src_main_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_src_main_js__WEBPACK_IMPORTED_MODULE_1__);
 
-// import '/src/main.js'
 
+// import '/src/learning-info'
+// import '/src/test'
+// import '/src/test2'
 
 
 
 /***/ }),
 
-/***/ "./src/learning-info.js":
-/*!******************************!*\
-  !*** ./src/learning-info.js ***!
-  \******************************/
+/***/ "./src/main.js":
+/*!*********************!*\
+  !*** ./src/main.js ***!
+  \*********************/
 /***/ (() => {
 
-//промисы
-let content
-const p = new Promise(function (resolve, reject) {
-    let response =  fetch('https://fish-text.ru/get?format=html&number=1') //асинхронная операция запроса
-    content = 'text content' //типа получаем тело ответа
-    resolve() //переводим промис в остояние fulfilled
-})
+const textContent = document.getElementById('text')
+const spansDiv = document.getElementById('spans')
+const pointsSpan = document.getElementById('points')
+const loadingSpan = document.getElementById('loading')
+const prec = document.getElementById('precision')
+const velocity = document.getElementById('velocity')
+const againButton = document.getElementById('again-button')
+const startButton = document.getElementById('start')
+const welcomeTitle = document.getElementById('welcome-title')
+const initialInfo = document.getElementById('initial-information')
+const languageButtons = document.getElementById('language')
+const englishButton = document.getElementById('en')
+const russianButton = document.getElementById('ru')
+const skeleton = document.getElementById('skeleton-body')
 
-p.then(() => { //данный коллбэк будет вызван тогда, когда закончится асинхронная операция, т.е. вызван resolve()
-    console.log(content)
-})
-const errorPromise = new Promise(function (resolve, reject) {
-    reject(new Error('ошибка!')) //переводим промис в состояни rejected. результат выполнения - объект error
-})
-errorPromise.catch(() => {
-    console.log('catch the error')
-})
+let urlRu = 'https://fish-text.ru/get?format=html&number=3'
+let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=5&format=html'
+let url = urlRu
+let timeoutText
+let intervalTitle
+let countVelocityInterval
+let renderInterval
+let timeoutPromise1
+let timeoutPromise2
+let arrayOfLetters
+let correctAnswers
+let chosenLanguage
 
-//еще один пример промисов
-console.log('Request data...')
-const p2 = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        console.log('Preparing data...')
-        const backendData = {
-            server: 'aws',
-            port: 2000,
-            status: 'working'
-        }
-        resolve(backendData)
-    }, 2000)
-})
-
-p2.then(data => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(data)
-        }, 2000)
-    })
-})
-    .then((clientData) => {
-    console.log('Data received', clientData)
-})
-    .catch(err => console.error('Error: ', err))
-    .finally(() => console.log('Finally')) //выполнится в любом случае, независимо от того с ошибкй выполнился промис или нет
-
-
-//3 пример промисов
-const sleep = (ms => {
+const fetchRandomText = url => {
     return new Promise(resolve => {
-        setTimeout(() => resolve(), ms)
+        const fetchedText = fetch(url)
+        resolve(fetchedText)
     })
-})
-
-sleep(2000).then(() => console.log('After 2 sec'))
-sleep(5000).then(() => console.log('After 5 sec'))
-
-//методы промисов
-Promise.all([sleep(2000), sleep(5000)]).then(() => { //в данный метод мы передаем массив промисов, и он тоже возвращает промис
-    console.log('Promise.all') // и промис, который возвращается в методе All будет выполнен только тогда, когда выполняться переданные ему промисы. причем переданные в метод промисы выполняются не друг за другом, а параллельно
-}) // этот метод полезен тогда, когда нам нужно дождаться набора данных с разных эндпоинтов, чтобы их затем скомбинировать например
-
-Promise.race([sleep(2000), sleep(5000)]).then(() => { // тоже передается массив просмисов
-    console.log('Promise.race') //как только выполнится первый промис, который быстрее всего, сразу же промис который возвращается в методе race выполняется
-})
-
-//рекурсивный вызов
-function factorial(n) {
-    if (n <= 1) { //базовый случай - это выход из рекурсии, точка, на которой функция перестает вызывать саму себя
-        return 1
-    }
-
-    return n * factorial(n - 1) //повторяемое действие
 }
+let counter
+function checkLetterForListener (event){
+    let currentElem = document.getElementById('current-element')
+    let requiredNextElement = document.getElementsByClassName(`letter${counter}`)
+    let nextElem = requiredNextElement[0]
 
-console.log(factorial(5))
+    let requiredLastElement = document.getElementsByClassName(`letter${arrayOfLetters.length}`)
+    let lastElement = requiredLastElement[0]
+    lastElement.setAttribute('id', 'last-element')
 
-//=============1.0 прототип - это объект который присутствует у других объектов и вызывается по цепочке сверху вниз
-//т.е. если мы находим какие-то поля или функции на верхнем уровне, то мы обращаемся к ним ,если не находим, идем вниз по прототипу и тд
-const person = new Object({ //создаем объект через глобальный класс
-    name: 'Lera',
-    age: 21,
-    sayHi: function () {
-        console.log('Hi!')
-    }
-})
-console.log(person)
+    if (currentElem.textContent === event.key) {
+        countVelocity()
+        currentElem.classList.remove('active-letter', 'wrong-letter')
+        currentElem.classList.add('correct-letter')
+        currentElem.removeAttribute('id')
+        if (currentElem === lastElement) {
+            document.removeEventListener('keydown', checkLetterForListener)
+            return
+        }
+        nextElem.setAttribute('id', 'current-element')
+        nextElem.classList.add('active-letter')
+        counter++
+    } else if (event.key === 'Shift' || event.key === 'Control' || event.key === 'Alt' || event.key === 'Tab' || event.key === 'Enter' || event.key === 'Backspace' || event.key === 'AltGraph') {
 
-Object.prototype.sayGoodbye = function () { //добавляем в глобальный прототип свойство
-    console.log('goodbye')
-}
+    } else {
+        if (currentElem.classList.contains('active-letter')) {
+            countPrecision(currentElem.textContent, event.key, arrayOfLetters)
+        }
+        currentElem.classList.remove('active-letter')
+        currentElem.classList.add('wrong-letter')
 
-const lena = Object.create(person) //создаем прототип для лены
-lena.name = 'Lena'
-
-console.log(lena)
-
-
-//===========2.0 this. как работает bind, call, apply
-//слово this - всегда динамичное, оно указывает на объект, в контексте которого оно было вызвано
-
-function hello() {
-    console.log('Hello', this)
-}
-
-const person2 = {
-    name: 'Lera',
-    age: 21,
-    sayHello: hello,
-    sayHelloWindow: hello.bind(window), //можно передать контекст прямо в  объекте
-    logInfo: function (job, phone) {
-        console.group(`${this.name} info:`)
-        console.log(`Name is ${this.name}`)
-        console.log(`Age is ${this.age}`)
-        console.log(`Job is ${job}`)
-        console.log(`Phone is ${phone}`)
-        console.groupEnd()
     }
 }
 
-//в данном случае this - это объект person2 (при вызове метода объекта)
-person2.sayHello()
+function setAttributesForFirstElement() {
+    const firstElement = document.querySelector('span')
+    firstElement.setAttribute('id', 'current-element')
+    firstElement.classList.add('active-letter')
 
-//используя метод .bind() мы можем передать контекст выполнения
-person2.sayHello.bind(window)()
-
-person2.sayHelloWindow()
-person2.logInfo()
-
-const roma = {
-    name: 'Roman',
-    age: 25
+    document.addEventListener('keydown', checkLetterForListener)
 }
 
-//чтобы передать контекст выполнения roma в метод loginfo объекта person2, можно использовать следующие методы:
-person2.logInfo.bind(roma, 'Frontend', '8-999-563-65-21')() //возвращает функцию и мы можем вызвать ее когда угодно, как в данном примере сразу
-person2.logInfo.call(roma, 'Frontend', '8-999-563-65-21') //этот метод в отличие от bind сразу же вызывает функцию
-person2.logInfo.apply(roma, ['Frontend', '8-999-563-65-21']) //в apply только 2 параметра: контекст и парамерт, который может быть массивом аргументов, которые мы передадим в функцию
+function loadText(array) {
+    timeoutText = setTimeout(() => {
+        array.forEach((letter, index) => {
+            spansDiv.innerHTML += `<span class="letter${index + 1}">${letter}</span>`
+        })
+    }, 1500)
+}
 
-//////
-const array = [1, 2, 3, 4, 5]
-// function multBy(arr, number) {
-//     return arr.map(function (i) {
-//         return i * number
+function pointsSpanAnimation() {
+    intervalTitle = setInterval(() => {
+        switch (pointsSpan.textContent) {
+            case '...': pointsSpan.textContent = '.'
+                break;
+            case '.': pointsSpan.textContent = '..'
+                break;
+            default: pointsSpan.textContent = '...'
+        }
+    },500)
+}
+
+let precision
+function countPrecision(curElem, pressedKey, array) {
+    if (curElem !== pressedKey) {
+        correctAnswers = correctAnswers - 1
+    }
+    precision = (correctAnswers / array.length * 100).toFixed(1)
+    prec.textContent = precision + '%'
+}
+
+function clickOnToggle(firstLanguage, secondLanguage) {
+    firstLanguage.style.backgroundColor = '#2d8843'
+    firstLanguage.style.color = '#e9ffea'
+    secondLanguage.style.backgroundColor = 'transparent'
+    secondLanguage.style.color = '#2d8843'
+}
+
+englishButton.addEventListener('click', function () {
+    chosenLanguage = 'english'
+    url = urlEn
+    clickOnToggle(englishButton, russianButton)
+})
+
+russianButton.addEventListener('click', function () {
+    chosenLanguage = 'russian'
+    url = urlRu
+    clickOnToggle(russianButton, englishButton)
+})
+function clickStartButton() {
+    welcomeTitle.classList.add('hide-element')
+    startButton.classList.add('hide-element')
+    languageButtons.classList.add('hide-element')
+    loadingSpan.textContent = 'Загрузка'
+    pointsSpan.textContent = '...'
+    pointsSpanAnimation()
+    initialInfo.style.display = 'flex'
+    textContent.style.width = '600px'
+    textContent.style.flexDirection = 'row'
+    textContent.style.display = 'block'
+    textContent.style.textAlign = 'initial'
+    skeleton.style.display = 'flex'
+    fillSkeletonWithText()
+    precision = 100
+    prec.textContent = precision + '%'
+    counter = 2
+
+    fetchRandomText(url)
+    .then((fetchedData) => {
+        return new Promise((resolve, reject) => {
+            timeoutPromise1 = setTimeout(() => resolve(fetchedData.text()), 1500)
+        })
+    })
+    .then((data) => {
+        const arrayLength = data.length
+        if (url === urlEn) {
+            arrayOfLetters = data.split('').slice(3, arrayLength - 5)
+        } else {
+            arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+        }
+        arrayOfLetters.forEach((letter, index) => {
+            if (letter === '—') {
+                arrayOfLetters[index] = '-'
+            }
+            if (letter === '  ') {
+                arrayOfLetters[index] = ' '
+            }
+        })
+        correctAnswers = arrayOfLetters.length
+        return new Promise((resolve ,reject) => {
+            loadText(arrayOfLetters)
+            timeoutPromise2 = setTimeout(() => resolve(), 1500)
+        })
+    })
+    .then(() => {
+        renderVelocity()
+        countVelocityInterval = setInterval(() => {
+            if (pressedKeysNumber > 0) {
+                pressedKeysNumber--
+            }
+        }, 1000)
+        clearTimeout(timeoutText)
+        clearTimeout(timeoutPromise1)
+        clearTimeout(timeoutPromise2)
+        clearInterval(intervalTitle)
+        loadingSpan.textContent = 'Текст загружен'
+        pointsSpan.textContent = ''
+        loadingSpan.classList.add('smooth-hide')
+        skeleton.style.display = 'none'
+        setAttributesForFirstElement()
+
+    })
+    .catch(e => console.error(e))
+}
+
+function clickAgainButton() {
+    clearTimeout(timeoutText)
+    clearTimeout(timeoutPromise1)
+    clearTimeout(timeoutPromise2)
+    clearInterval(intervalTitle)
+    clearInterval(renderInterval)
+    clearInterval(countVelocityInterval)
+
+    document.removeEventListener('keydown', checkLetterForListener)
+
+    welcomeTitle.classList.remove('hide-element')
+    startButton.classList.remove('hide-element')
+    languageButtons.classList.remove('hide-element')
+
+    spansDiv.innerHTML = ''
+
+    loadingSpan.textContent = 'Тренажер слепой печати'
+    loadingSpan.style.opacity = '100%'
+    loadingSpan.classList.remove('smooth-hide')
+
+    velocity.textContent = '0 зн./мин'
+
+    pointsSpan.textContent = ''
+    initialInfo.style.display = 'none'
+
+    textContent.style.display = 'flex'
+    textContent.style.flexDirection = 'column'
+    textContent.style.width = '800px'
+    textContent.style.alignItems = 'center'
+    textContent.style.textAlign = 'center'
+
+    skeleton.innerHTML = ''
+    url = urlRu
+    clickOnToggle(russianButton, englishButton)
+}
+
+startButton.onclick = clickStartButton
+againButton.onclick = clickAgainButton
+
+let pressedKeysNumber
+
+function countVelocity() {
+    pressedKeysNumber++
+}
+
+function fillSkeletonWithText() {
+    let text = 'skeleton skeleton skeleton skeleton skeleton skeleton skeleton skeleton'
+    let arrayOfSkeletonText = text.split(' ')
+    arrayOfSkeletonText.forEach((word) => {
+        skeleton.innerHTML += `<span class="skeleton__text">${word}</span>`
+    })
+}
+
+function renderVelocity() {
+    pressedKeysNumber = 60
+    renderInterval = setInterval(() => {
+        velocity.textContent = `${pressedKeysNumber} зн./мин`
+    }, 100)
+}
+
+//1 вариант функции
+// async function loadTextContent() {
+//     const RESPONSE = await fetch(URL)
+//     const TEXT_FROM_RESPONSE = await RESPONSE.text()
+//     let arrayLength = TEXT_FROM_RESPONSE.length
+//     arrayOfLetters = TEXT_FROM_RESPONSE.split("").slice(3, arrayLength - 4)
+//
+//     const promise = new Promise((resolve, reject) => {
+//         loadText(arrayOfLetters)
+//         setTimeout(() => {
+//             resolve()
+//         }, 3000)
+//     })
+//     promise.then(() => {
+//         clearTimeout(timeoutText)
+//         clearInterval(intervalTitle)
+//         LOADING_SPAN.textContent = 'Текст загружен'
+//         POINTS_SPAN.textContent = ''
+//         LOADING_SPAN.classList.add('smooth-hide')
+//         setAttributesForFirstElement()
 //     })
 // }
-// console.log(multBy(array, 5))
 
-//но как сделать так, чтобы у любого массива был всегда метод, который позволит умножить каждый эллемент массива на заданное число
-Array.prototype.multBy = function (number) {
-    return this.map(function (i) {
-        return i * number
-    })
-}
-console.log(array.multBy(2))
-
-//============3.0 замыкания - это функция внутри другой функции
-function logName(name) {
-    return function (secondName) {
-        console.log('Fullname:', name, secondName)
-    }
-}
-
-const fullname = logName('Lera')
-fullname('Filatova')
-
-//
-function urlGenerator(domain) {
-    return function (url) {
-        return (`https://${url}.${domain}`)
-    }
-}
-
-const comUrl = urlGenerator('com')
-const ruUrl = urlGenerator('ru')
-
-console.log(comUrl('netflix'))
-console.log(comUrl('youtube'))
-
-console.log(ruUrl('netflix'))
-console.log(ruUrl('youtube'))
-
-//написать свою функцию Bind
-function logPerson() {
-    console.log(`Person: ${this.name}, ${this.age}, ${this.job}`)
-}
-
-const pers1 = {
-    name: 'Михаил',
-    age: 22,
-    job: 'Frontend'
-}
-
-const pers2 = {
-    name: 'Елена',
-    age: 19,
-    job: 'SMM'
-}
-
-function bind(context, fn) {
-    return function (...arr) {
-        fn.apply(context, arr)
-    }
-}
-
-bind(pers1, logPerson)()
-bind(pers2, logPerson)()
-
-
-
-
-
-
-
-
-
-
-
-
+//2 вариант
+// fetchRandomText(URL)
+//     .then((fetchedData) => {
+//         return fetchedData.text()
+//     })
+//     .then((data) => {
+//         const arrayLength = data.length
+//         arrayOfLetters = data.split('').slice(3, arrayLength - 4)
+//         arrayOfLetters.forEach((letter, index) => {
+//             if (letter === '—') {
+//                 arrayOfLetters[index] = '-'
+//             }
+//             if (letter === '  ') {
+//                 arrayOfLetters[index] = '   '
+//             }
+//         })
+//         correctAnswers = arrayOfLetters.length
+//     })
+//     .then(() => {
+//         return new Promise((resolve ,reject) => {
+//             loadText(arrayOfLetters)
+//             setTimeout(() => resolve(), 3000)
+//         })
+//     })
+//     .then(() => {
+//         clearTimeout(timeoutText)
+//         clearInterval(intervalTitle)
+//         loadingSpan.textContent = 'Текст загружен'
+//         pointsSpan.textContent = ''
+//         loadingSpan.classList.add('smooth-hide')
+//         setAttributesForFirstElement()
+//     })
+//     .catch(e => console.error(e))
 
 
 /***/ })
@@ -656,7 +745,7 @@ bind(pers2, logPerson)()
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("b977aeab7394bf6b0d0e")
+/******/ 		__webpack_require__.h = () => ("f52f5296dff4846bf129")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

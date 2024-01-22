@@ -153,7 +153,8 @@ Array.prototype.multBy = function (number) {
 }
 console.log(array.multBy(2))
 
-//============3.0 замыкания - это функция внутри другой функции
+//============3.0 замыкания - это способность функции в JS запоминать лексическое окружение, в котором она была создана, т.е хранить ссылку на него и в нужный момент к нему обратиться
+//лексическое окружение - это скрытый (невидимый) объект, который есть у каждого скрипта, блока и функуии в JS. оно содержит ссылку на родительское (внешнее) окружение и переменные
 function logName(name) {
     return function (secondName) {
         console.log('Fullname:', name, secondName)
@@ -205,14 +206,52 @@ function bind(context, fn) {
 bind(pers1, logPerson)()
 bind(pers2, logPerson)()
 
+//========Объекты в деталях
+//деструктуризация объекта
+const pupil = {
+    name: 'Kira',
+    age: 12,
+    grade: 6
+}
+const {name, age, grade, formed = true} = pupil //в последнем мы задам значение переменной по умолчанию
+console.log(name, age, grade, formed)
 
+//ключи объекта
+Object.keys(pupil).forEach((p) => {
+    console.log(pupil[p])
+})
 
+//=========Классы
+//В JavaScript класс – это разновидность функции
+class Human {
+    constructor() {
+        this.isHuman = true
+    }
+}
+class User extends Human{ //наслдуется от Human
+    // методы класса
+    constructor(name, age) {
+        super() //вызываем родительский конструктор Human чтобы проинициализировать
+        this.name = name ?? 'Undefined name'
+        this.age = age ?? 'Undefined age'
+    }
+    // method1() { ... }
+    // method2() { ... }
+    // method3() { ... }
 
+}
+const user = new User('Lera')
+console.log(user)
 
-
-
-
-
-
-
-
+//базовый синтаксис для класса
+class MyClass {
+    prop = true; // свойство
+    constructor(args) { // конструктор
+        // ...
+    }
+    method(args) {} // метод
+    get something() {} // геттер
+    set something(args) {} // сеттер
+    [Symbol.iterator]() {} // метод с вычисляемым именем (здесь - символом)
+    // ...
+}

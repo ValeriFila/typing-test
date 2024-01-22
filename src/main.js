@@ -3,6 +3,7 @@ const spansDiv = document.getElementById('spans')
 const pointsSpan = document.getElementById('points')
 const loadingSpan = document.getElementById('loading')
 const prec = document.getElementById('precision')
+const velocity = document.getElementById('velocity')
 const againButton = document.getElementById('again-button')
 const startButton = document.getElementById('start')
 const welcomeTitle = document.getElementById('welcome-title')
@@ -17,6 +18,8 @@ let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=5&format=html'
 let url = urlRu
 let timeoutText
 let intervalTitle
+let countVelocityInterval
+let renderInterval
 let timeoutPromise1
 let timeoutPromise2
 let arrayOfLetters
@@ -29,10 +32,8 @@ const fetchRandomText = url => {
         resolve(fetchedText)
     })
 }
-
-let counter = 2
+let counter
 function checkLetterForListener (event){
-    countVelocity()
     let currentElem = document.getElementById('current-element')
     let requiredNextElement = document.getElementsByClassName(`letter${counter}`)
     let nextElem = requiredNextElement[0]
@@ -42,6 +43,7 @@ function checkLetterForListener (event){
     lastElement.setAttribute('id', 'last-element')
 
     if (currentElem.textContent === event.key) {
+        countVelocity()
         currentElem.classList.remove('active-letter', 'wrong-letter')
         currentElem.classList.add('correct-letter')
         currentElem.removeAttribute('id')
@@ -133,17 +135,17 @@ function clickStartButton() {
     textContent.style.textAlign = 'initial'
     skeleton.style.display = 'flex'
     fillSkeletonWithText()
+    precision = 100
+    prec.textContent = precision + '%'
+    counter = 2
 
     fetchRandomText(url)
     .then((fetchedData) => {
-        console.log('1')
         return new Promise((resolve, reject) => {
             timeoutPromise1 = setTimeout(() => resolve(fetchedData.text()), 1500)
         })
     })
     .then((data) => {
-        console.log('2')
-        console.log(data)
         const arrayLength = data.length
         if (url === urlEn) {
             arrayOfLetters = data.split('').slice(3, arrayLength - 5)
@@ -165,7 +167,12 @@ function clickStartButton() {
         })
     })
     .then(() => {
-        console.log('3')
+        renderVelocity()
+        countVelocityInterval = setInterval(() => {
+            if (pressedKeysNumber > 0) {
+                pressedKeysNumber--
+            }
+        }, 1000)
         clearTimeout(timeoutText)
         clearTimeout(timeoutPromise1)
         clearTimeout(timeoutPromise2)
@@ -175,6 +182,7 @@ function clickStartButton() {
         loadingSpan.classList.add('smooth-hide')
         skeleton.style.display = 'none'
         setAttributesForFirstElement()
+
     })
     .catch(e => console.error(e))
 }
@@ -184,6 +192,8 @@ function clickAgainButton() {
     clearTimeout(timeoutPromise1)
     clearTimeout(timeoutPromise2)
     clearInterval(intervalTitle)
+    clearInterval(renderInterval)
+    clearInterval(countVelocityInterval)
 
     document.removeEventListener('keydown', checkLetterForListener)
 
@@ -196,6 +206,8 @@ function clickAgainButton() {
     loadingSpan.textContent = 'Тренажер слепой печати'
     loadingSpan.style.opacity = '100%'
     loadingSpan.classList.remove('smooth-hide')
+
+    velocity.textContent = '0 зн./мин'
 
     pointsSpan.textContent = ''
     initialInfo.style.display = 'none'
@@ -213,8 +225,11 @@ function clickAgainButton() {
 
 startButton.onclick = clickStartButton
 againButton.onclick = clickAgainButton
-function countVelocity() {
 
+let pressedKeysNumber
+
+function countVelocity() {
+    pressedKeysNumber++
 }
 
 function fillSkeletonWithText() {
@@ -223,6 +238,13 @@ function fillSkeletonWithText() {
     arrayOfSkeletonText.forEach((word) => {
         skeleton.innerHTML += `<span class="skeleton__text">${word}</span>`
     })
+}
+
+function renderVelocity() {
+    pressedKeysNumber = 60
+    renderInterval = setInterval(() => {
+        velocity.textContent = `${pressedKeysNumber} зн./мин`
+    }, 100)
 }
 
 //1 вариант функции
