@@ -35,9 +35,13 @@ const englishButton = document.getElementById('en')
 const russianButton = document.getElementById('ru')
 const skeleton = document.getElementById('skeleton-body')
 
-let urlRu = 'https://fish-text.ru/get?format=html&number=3'
-let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=5&format=html'
+
+let urlRu = 'https://fish-text.ru/get?format=html&number=1'
+let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=1&format=html'
 let url = urlRu
+let requiredLastElement
+let lastElement
+
 let timeoutText
 let intervalTitle
 let countVelocityInterval
@@ -60,16 +64,15 @@ function checkLetterForListener (event){
     let requiredNextElement = document.getElementsByClassName(`letter${counter}`)
     let nextElem = requiredNextElement[0]
 
-    let requiredLastElement = document.getElementsByClassName(`letter${arrayOfLetters.length}`)
-    let lastElement = requiredLastElement[0]
-    lastElement.setAttribute('id', 'last-element')
-
     if (currentElem.textContent === event.key) {
         countVelocity()
         currentElem.classList.remove('active-letter', 'wrong-letter')
         currentElem.classList.add('correct-letter')
         currentElem.removeAttribute('id')
-        if (currentElem === lastElement) {
+        if (currentElem.classList.contains(`letter${arrayOfLetters.length}`)) {
+            console.log('you entered the last letter')
+            clearInterval(renderInterval)
+            clearInterval(plusOneSecondCounter)
             document.removeEventListener('keydown', checkLetterForListener)
             return
         }
@@ -84,7 +87,6 @@ function checkLetterForListener (event){
         }
         currentElem.classList.remove('active-letter')
         currentElem.classList.add('wrong-letter')
-
     }
 }
 
@@ -190,15 +192,13 @@ function clickStartButton() {
     })
     .then(() => {
         renderVelocity()
-        countVelocityInterval = setInterval(() => {
-            if (pressedKeysNumber > 0) {
-                pressedKeysNumber--
-            }
-        }, 1000)
         clearTimeout(timeoutText)
         clearTimeout(timeoutPromise1)
         clearTimeout(timeoutPromise2)
         clearInterval(intervalTitle)
+        requiredLastElement = document.getElementsByClassName(`letter${arrayOfLetters.length}`)
+        lastElement = requiredLastElement[0]
+        lastElement.setAttribute('id', 'last-element')
         loadingSpan.textContent = 'Текст загружен'
         pointsSpan.textContent = ''
         loadingSpan.classList.add('smooth-hide')
@@ -213,8 +213,9 @@ function clickAgainButton() {
     clearTimeout(timeoutPromise1)
     clearTimeout(timeoutPromise2)
     clearInterval(intervalTitle)
+
     clearInterval(renderInterval)
-    clearInterval(countVelocityInterval)
+    clearInterval(plusOneSecondCounter)
 
     document.removeEventListener('keydown', checkLetterForListener)
 
@@ -248,6 +249,9 @@ startButton.onclick = clickStartButton
 againButton.onclick = clickAgainButton
 
 let pressedKeysNumber
+let pressVelocity
+let plusOneSecondCounter
+let seconds
 
 function countVelocity() {
     pressedKeysNumber++
@@ -262,9 +266,14 @@ function fillSkeletonWithText() {
 }
 
 function renderVelocity() {
-    pressedKeysNumber = 60
+    pressedKeysNumber = 1
+    seconds = 1
+    plusOneSecondCounter = setInterval(() => {
+        seconds++
+    }, 1000)
     renderInterval = setInterval(() => {
-        velocity.textContent = `${pressedKeysNumber} зн./мин`
+        pressVelocity = pressedKeysNumber/(seconds/60)
+        velocity.textContent = `${pressVelocity.toFixed(0)} зн./мин`
     }, 100)
 }
 
