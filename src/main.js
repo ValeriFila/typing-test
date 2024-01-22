@@ -182,7 +182,6 @@ function clickStartButton() {
         loadingSpan.classList.add('smooth-hide')
         skeleton.style.display = 'none'
         setAttributesForFirstElement()
-
     })
     .catch(e => console.error(e))
 }

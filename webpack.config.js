@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require("webpack")
 const {ProgressPlugin} = require('webpack')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 module.exports = {
     // Указываем путь до входной точки:
     entry: path.resolve(__dirname, 'src', 'index.js'),
@@ -13,7 +14,7 @@ module.exports = {
         path: path.resolve(__dirname, 'docs'),
         // Имя файла со сборкой:
         filename: 'bundle.js',
-        assetModuleFilename: 'images/[name][ext]'
+        assetModuleFilename: './[name][ext]'
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -24,7 +25,7 @@ module.exports = {
             filename: 'css/[name].[contenthash:8].css',
             chunkFilename: 'css/[name].[contenthash:8].css',
         }),
-        new webpack.HotModuleReplacementPlugin(),
+        new CleanWebpackPlugin(),
     ],
     mode: 'development',
     module: {
@@ -37,7 +38,7 @@ module.exports = {
 
             },
             {
-                test:/\.(?:ico|gif|png|jpg|jpeg)$/i,
+                test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
                 type: 'asset/resource',
             }
         ]

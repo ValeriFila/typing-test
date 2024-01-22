@@ -11,6 +11,8 @@
     "build": "webpack",
     "start": "webpack serve",
     "watch": "webpack --watch"
+  },
+  "dependencies": {
+    "clean-webpack-plugin": "^4.0.0"
   }
 }
-
