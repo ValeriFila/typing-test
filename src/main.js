@@ -14,8 +14,8 @@ const russianButton = document.getElementById('ru')
 const skeleton = document.getElementById('skeleton-body')
 
 
-let urlRu = 'https://fish-text.ru/get?format=html&number=1'
-let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=1&format=html'
+let urlRu = 'https://fish-text.ru/get?format=html&number=3'
+let urlEn = 'https://baconipsum.com/api/?type=all-meat&sentences=5&format=html'
 let url = urlRu
 let requiredLastElement
 let lastElement
