@@ -287,7 +287,7 @@ body {
     background: linear-gradient(45deg, #98ea87, #bff8b6, #ffffff, #98ea87);
     background-size: 400% 400%;
     border-radius: 50px;
-    animation: gradient 10s ease-out infinite alternate
+    animation: gradient 10s ease-out infinite alternate;
 }
 
 @keyframes gradient {
