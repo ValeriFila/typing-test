@@ -1,4 +1,4 @@
-name: Monthly issue metrics
+name: Issue report
 on: workflow_dispatch
 
 permissions:
