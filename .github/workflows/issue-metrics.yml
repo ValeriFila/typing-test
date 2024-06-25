@@ -1,6 +1,10 @@
 name: Issues report
 on: workflow_dispatch
 
+env:
+  ASSIGNEE: ValeriFila
+  CLOSED: 2024-01-01
+
 permissions:
   contents: read
 
@@ -20,11 +24,9 @@ jobs:
         uses: github/issue-metrics@v3
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SEARCH_QUERY: 'repo:ValeriFila/typing-test is:issue is:closed assignee:${{ env.ASSIGNEE }} closed:${{ env.CLOSED }}'
+          SEARCH_QUERY: 'repo:ValeriFila/typing-test is:issue is:closed assignee:${{ env.ASSIGNEE }} closed:>${{ env.CLOSED }}'
           HIDE_TIME_TO_FIRST_RESPONSE: true
           HIDE_TIME_TO_ANSWER: true
-          ASSIGNEE: 'ValeriFila'
-          CLOSED: '>2024-01-01'
 
       - name: Create issue
         uses: peter-evans/create-issue-from-file@v5
