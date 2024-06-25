@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 env:
   ASSIGNEE: ValeriFila
-  CLOSED: 2024-01-01
+  CLOSED: '2024-01-01'
 
 permissions:
   contents: read
