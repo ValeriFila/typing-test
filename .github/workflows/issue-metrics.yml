@@ -30,10 +30,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SEARCH_QUERY: 'repo:ValeriFila/typing-test is:issue is:closed assignee:ValeriFila closed:>2024-01-01'
+          HIDE_TIME_TO_FIRST_RESPONSE: true
+          HIDE_TIME_TO_ANSWER: true
 
       - name: Create issue
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: Report
+          title: Отчет о выполненных задачах
           token: ${{ secrets.GITHUB_TOKEN }}
           content-filepath: ./issue_metrics.md
