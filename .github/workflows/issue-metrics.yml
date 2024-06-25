@@ -1,4 +1,4 @@
-name: Issue report
+name: Issues report
 on: workflow_dispatch
 
 permissions:
